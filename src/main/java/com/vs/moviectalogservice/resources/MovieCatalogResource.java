@@ -4,7 +4,6 @@ import com.vs.moviectalogservice.model.CatalogItem;
 import com.vs.moviectalogservice.model.Movie;
 import com.vs.moviectalogservice.model.Rating;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 public class MovieCatalogResource {
 
     private final static String DESC = "desc";
-    private final RestTemplate restTemplate;
     private final WebClient.Builder webClientBuilder;
 
     @RequestMapping("/{userId}")
