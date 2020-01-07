@@ -3,6 +3,7 @@ package com.vs.moviectalogservice.resources;
 import com.vs.moviectalogservice.model.CatalogItem;
 import com.vs.moviectalogservice.model.Movie;
 import com.vs.moviectalogservice.model.Rating;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,21 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/catalog")
 public class MovieCatalogResource {
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final static String DESC = "desc";
+    private final RestTemplate restTemplate;
+    private final WebClient.Builder webClientBuilder;
 
     @RequestMapping("/{userId}")
     public List<CatalogItem> getCatalogItem(@PathVariable("userId") String userId) {
@@ -46,7 +44,12 @@ public class MovieCatalogResource {
                             .bodyToMono(Movie.class)
                             .block();
 
-                    return null; }) //CatalogItem. (movie.getName(), "desc", rating.getRating());})
+            assert movie != null;
+            return CatalogItem.builder()
+                            .name(movie.getName())
+                            .desc(DESC)
+                            .rating(Integer.parseInt(rating.getMovieId()))
+                            .build(); })
                 .collect(Collectors.toList()
         );
 
